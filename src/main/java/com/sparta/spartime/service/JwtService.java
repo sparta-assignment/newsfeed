@@ -1,4 +1,4 @@
-package com.sparta.spartime.util;
+package com.sparta.spartime.service;
 
 import com.sparta.spartime.entity.User;
 import io.jsonwebtoken.*;
@@ -16,8 +16,7 @@ import java.util.Base64;
 import java.util.Date;
 
 @Component
-public class JwtProvider {
-
+public class JwtService {
     @Value("${jwt.secret-key}")
     private String jwtSecretKey;
     private Key key;
@@ -27,8 +26,8 @@ public class JwtProvider {
     public static String CLAIM_NICKNAME = "nickname";
     public static String AUTH_SCHEME = "Bearer ";
     public static String AUTH_HEADER = "Authorization";
+    private final Logger log = LoggerFactory.getLogger(JwtService.class.getName());
 
-    private final Logger log = LoggerFactory.getLogger(JwtProvider.class.getName());
     @PostConstruct
     public void init() {
         byte[] bytes = Base64.getDecoder().decode(jwtSecretKey);
@@ -46,7 +45,7 @@ public class JwtProvider {
                 .claim(CLAIM_ROLE, role)
                 .claim(CLAIM_STATUS, status)
                 .claim(CLAIM_NICKNAME,nickname)
-                .signWith(key)
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
@@ -56,7 +55,7 @@ public class JwtProvider {
         return Jwts.builder()
                 .setIssuedAt(date)
                 .setExpiration(new Date(date.getTime()+ ( 24 * 30 * 60 * 60 * 1000L)))
-                .signWith(key)
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
@@ -68,12 +67,11 @@ public class JwtProvider {
         if (!token.startsWith(AUTH_SCHEME)) {
             return null;
         }
-        return token.substring(AUTH_SCHEME.length() + 1);
+        return token.substring(AUTH_SCHEME.length());
     }
 
     public boolean isTokenValidate(String token) {
-        try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+        try { Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (SecurityException | MalformedJwtException | SignatureException e) {
             log.error("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
@@ -87,4 +85,14 @@ public class JwtProvider {
         return false;
     }
 
+    public User getUserFromAccessToken(String token){
+        Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+        return User.builder()
+                .id(claims.get(CLAIM_ID, Long.class))
+                .email(claims.getSubject())
+                .nickname(claims.get(CLAIM_NICKNAME, String.class))
+                .role(User.Role.valueOf(claims.get(CLAIM_ROLE, String.class)) )
+                .status( User.Status.valueOf(claims.get(CLAIM_STATUS, String.class)))
+                .build();
+    }
 }

@@ -5,7 +5,6 @@ import com.sparta.spartime.dto.response.LoginResponseDto;
 import com.sparta.spartime.entity.User;
 import com.sparta.spartime.repository.UserRepository;
 import com.sparta.spartime.security.principal.UserPrincipal;
-import com.sparta.spartime.util.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,7 +17,7 @@ public class AuthService {
 
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
-    private final JwtProvider jwtProvider;
+    private final JwtService jwtService;
 
     public LoginResponseDto login(UserLoginRequestDto requestDto) {
         /*
@@ -53,8 +52,8 @@ public class AuthService {
 
          */
 
-        String accessToken = jwtProvider.createAccessToken(user.getId(), user.getEmail(), user.getRole(), user.getStatus(),  user.getNickname());
-        String refreshToken = jwtProvider.createRefreshToken();
+        String accessToken = jwtService.createAccessToken(user.getId(), user.getEmail(), user.getRole(), user.getStatus(),  user.getNickname());
+        String refreshToken = jwtService.createRefreshToken();
 
 
         return new LoginResponseDto(accessToken, refreshToken);
