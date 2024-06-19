@@ -2,15 +2,13 @@ package com.sparta.spartime.entity;
 
 import com.sparta.spartime.entity.common.TimeStamp;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 @Entity
+@Getter
 @Table(name = "users")
 public class User extends TimeStamp {
     @Id
@@ -29,14 +27,14 @@ public class User extends TimeStamp {
     private String intro;
 
     @Enumerated(EnumType.STRING)
-    private Role role = Role.USER;
+    private Role role;
 
     private String refreshToken;
 
     private String recentPassword;
 
     @Enumerated(EnumType.STRING)
-    private Status status = Status.ACTIVITY;
+    private Status status;
 
     public enum Role {
         USER,
