@@ -5,12 +5,14 @@ import com.sparta.spartime.dto.response.UserResponseDto;
 import com.sparta.spartime.entity.User;
 import com.sparta.spartime.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public UserResponseDto signup(UserSignupRequestDto requestDto) {
         String email = requestDto.getEmail();
@@ -25,7 +27,7 @@ public class UserService {
         // TODO: password 는 encode 해야함
         User user = User.builder()
                 .email(email)
-                .password(password)
+                .password(passwordEncoder.encode(password))
                 .nickname(nickname)
                 .intro(intro)
                 .role(User.Role.USER)

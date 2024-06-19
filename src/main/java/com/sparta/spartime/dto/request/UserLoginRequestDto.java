@@ -2,7 +2,9 @@ package com.sparta.spartime.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
+import lombok.Getter;
 
+@Getter
 public class UserLoginRequestDto {
     @Email
     private String email;

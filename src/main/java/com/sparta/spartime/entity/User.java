@@ -47,4 +47,8 @@ public class User extends TimeStamp {
         BLOCKED
     }
 
+    @Transient
+    public boolean isActivity() {
+        return this.status == Status.ACTIVITY;
+    }
 }
