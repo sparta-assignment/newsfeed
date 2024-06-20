@@ -1,16 +1,16 @@
 package com.sparta.spartime.web.controller;
 
 import com.sparta.spartime.dto.request.UserSignupRequestDto;
+import com.sparta.spartime.dto.request.UserWithdrawRequestDto;
 import com.sparta.spartime.dto.response.UserResponseDto;
+import com.sparta.spartime.security.principal.UserPrincipal;
 import com.sparta.spartime.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/users")
@@ -21,5 +21,11 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserResponseDto> signup(@Valid @RequestBody UserSignupRequestDto requestDto)  {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.signup(requestDto));
+    }
+
+    @PostMapping("/{id}")
+    public ResponseEntity withdraw(@PathVariable Long id, @RequestBody UserWithdrawRequestDto requestDto, @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        userService.withdraw(id, requestDto, userPrincipal);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
