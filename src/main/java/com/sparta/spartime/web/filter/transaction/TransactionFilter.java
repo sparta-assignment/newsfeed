@@ -1,6 +1,5 @@
 package com.sparta.spartime.web.filter.transaction;
 
-import com.sparta.spartime.web.interceptor.transaction.TransactionIdHolder;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

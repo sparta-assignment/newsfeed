@@ -1,4 +1,4 @@
-package com.sparta.spartime.web.interceptor.transaction;
+package com.sparta.spartime.web.filter.transaction;
 
 import java.util.UUID;
 
@@ -18,6 +18,6 @@ public class TransactionIdHolder {
     }
 
     public static String generateTransactionId() {
-        return UUID.randomUUID().toString();
+        return UUID.randomUUID().toString().substring(0, 8);
     }
 }
