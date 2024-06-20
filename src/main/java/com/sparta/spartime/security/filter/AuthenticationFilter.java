@@ -2,7 +2,7 @@ package com.sparta.spartime.security.filter;
 
 import com.sparta.spartime.entity.User;
 import com.sparta.spartime.security.principal.UserPrincipal;
-import com.sparta.spartime.service.JwtService;
+import com.sparta.spartime.security.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
