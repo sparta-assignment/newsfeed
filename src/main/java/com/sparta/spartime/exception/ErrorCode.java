@@ -15,6 +15,9 @@ public enum ErrorCode {
 
     // user
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER NOT FOUND"),
+    USER_INACTIVITY(HttpStatus.FORBIDDEN, "USER STATUS IS INACTIVITY"),
+    USER_BLOCKED(HttpStatus.FORBIDDEN, "USER STATUS IS BLOCKED"),
+    FAIL_AUTHENTICATION(HttpStatus.BAD_REQUEST, "USER EMAIL OR PASSWORD IS NOT CORRECT"),
 
     // comment
     COMMENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "해당하는 게시글이 없거나 댓글이 없습니다."),

@@ -52,6 +52,10 @@ public class User extends TimeStamp {
         return this.status == Status.ACTIVITY;
     }
 
+    public boolean isBlocked() {
+        return this.status == Status.BLOCKED;
+    }
+
     public void addRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }

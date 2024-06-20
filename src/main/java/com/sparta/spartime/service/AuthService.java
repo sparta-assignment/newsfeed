@@ -3,12 +3,16 @@ package com.sparta.spartime.service;
 import com.sparta.spartime.dto.request.UserLoginRequestDto;
 import com.sparta.spartime.dto.response.LoginResponseDto;
 import com.sparta.spartime.entity.User;
-import com.sparta.spartime.repository.UserRepository;
+import com.sparta.spartime.exception.BusinessException;
+import com.sparta.spartime.exception.ErrorCode;
 import com.sparta.spartime.security.principal.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,22 +26,30 @@ public class AuthService {
 
     @Transactional
     public LoginResponseDto login(UserLoginRequestDto requestDto) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        requestDto.getEmail(),
-                        requestDto.getPassword(),
-                        null
-                )
-        );
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            requestDto.getEmail(),
+                            requestDto.getPassword(),
+                            null
+                    )
+            );
 
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        User user =  userService.findByEmail(userPrincipal.getUsername());
+            UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+            User user = userService.findByEmail(userPrincipal.getUsername());
 
-        String accessToken = jwtService.createAccessToken(user.getId(), user.getEmail(), user.getRole(), user.getStatus(),  user.getNickname());
-        String refreshToken = jwtService.createRefreshToken();
+            String accessToken = jwtService.createAccessToken(user.getId(), user.getEmail(), user.getRole(), user.getStatus(), user.getNickname());
+            String refreshToken = jwtService.createRefreshToken();
 
-        user.addRefreshToken(refreshToken);
+            user.addRefreshToken(refreshToken);
 
-        return new LoginResponseDto(accessToken, refreshToken);
+            return new LoginResponseDto(accessToken, refreshToken);
+        } catch (LockedException e) {
+            throw new BusinessException(ErrorCode.USER_BLOCKED);
+        } catch (DisabledException e) {
+            throw new BusinessException(ErrorCode.USER_INACTIVITY);
+        } catch (AuthenticationException e) {
+            throw new BusinessException(ErrorCode.FAIL_AUTHENTICATION);
+        }
     }
 }
