@@ -3,6 +3,7 @@ package com.sparta.spartime.service;
 import com.sparta.spartime.dto.request.CommentRequestDto;
 import com.sparta.spartime.dto.response.CommentResponseDto;
 import com.sparta.spartime.entity.Comment;
+import com.sparta.spartime.entity.Like;
 import com.sparta.spartime.entity.Post;
 import com.sparta.spartime.entity.User;
 import com.sparta.spartime.exception.BusinessException;
@@ -19,6 +20,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class CommentService {
     private final PostService postService;
+    private final LikeService likeService;
     private final CommentRepository commentRepository;
 
     public CommentResponseDto createComment(User user, Long postId, CommentRequestDto requestDto) {
@@ -66,5 +68,13 @@ public class CommentService {
         if (!Objects.equals(inputUserId, userId)) {
             throw new BusinessException(ErrorCode.COMMENT_NOT_USER);
         }
+    }
+
+    public void likeComment(User user, Long commentId) {
+        likeService.like(user, Like.ReferenceType.COMMENT, commentId);
+    }
+
+    public void unlikeComment(User user, Long commentId) {
+        likeService.unlike(user, Like.ReferenceType.COMMENT, commentId);
     }
 }
