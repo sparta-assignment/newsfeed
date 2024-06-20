@@ -3,15 +3,13 @@ package com.sparta.spartime.web.controller;
 import com.sparta.spartime.aop.envelope.Envelope;
 import com.sparta.spartime.dto.request.UserLoginRequestDto;
 import com.sparta.spartime.dto.response.LoginResponseDto;
-import com.sparta.spartime.entity.User;
-import com.sparta.spartime.security.principal.UserPrincipal;
+import com.sparta.spartime.exception.BusinessException;
+import com.sparta.spartime.exception.ErrorCode;
 import com.sparta.spartime.service.AuthService;
-import com.sparta.spartime.web.argumentResolver.annotation.LoginUser;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -33,11 +31,7 @@ public class AuthController {
     }
 
     @GetMapping("/test")
-    public ResponseEntity<?> test(@LoginUser User user) {
-        log.info("id: {}", user.getId());
-        log.info("email: {}", user.getEmail());
-        log.info("nickname: {}", user.getNickname());
-        log.info("status: {}", user.getStatus());
-        return ResponseEntity.ok("");
+    public ResponseEntity<?> test() {
+        throw new BusinessException(ErrorCode.USER_NOT_FOUND);
     }
 }
