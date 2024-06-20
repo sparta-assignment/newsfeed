@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.spartime.security.exception.AccessDeniedHandlerImpl;
 import com.sparta.spartime.security.filter.AuthenticationFilter;
 import com.sparta.spartime.service.JwtService;
+import com.sparta.spartime.web.filter.transaction.TransactionFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -52,8 +53,8 @@ public class SecurityConfig {
         http.authorizeHttpRequests(requests -> requests
 //                 .requestMatchers("/api/admin/**").hasAnyRole(User.Role.ADMIN)
                         .requestMatchers("api/users").permitAll()
-                        .requestMatchers(HttpMethod.GET,"api/posts/**").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/api/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "api/posts/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/reissue").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
@@ -63,7 +64,8 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         );
 
-        http.addFilterAt(authenticationFilter(jwtService), BasicAuthenticationFilter.class);
+        http.addFilterAt(new TransactionFilter(), BasicAuthenticationFilter.class);
+        http.addFilterAt(authenticationFilter(jwtService), TransactionFilter.class);
 
         return http.build();
     }
