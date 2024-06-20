@@ -55,4 +55,16 @@ public class User extends TimeStamp {
     public void withdraw() {
         this.status = Status.INACTIVITY;
     }
+
+    public void editProfile(String newPassword, String newNickname, String newIntro) {
+        if (newPassword != null && !newPassword.isEmpty() && !this.password.equals(newPassword)) {
+            this.password = newPassword;
+        }
+        if (newNickname != null && !newNickname.isEmpty() && !this.nickname.equals(newNickname)) {
+            this.nickname = newNickname;
+        }
+        if (newIntro != null && !newIntro.isEmpty() && !this.intro.equals(newIntro)) {
+            this.intro = newIntro;
+        }
+    }
 }
