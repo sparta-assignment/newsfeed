@@ -1,7 +1,8 @@
 package com.sparta.spartime.service;
 
+import com.sparta.spartime.dto.request.TokenReIssueRequestDto;
 import com.sparta.spartime.dto.request.UserLoginRequestDto;
-import com.sparta.spartime.dto.response.LoginResponseDto;
+import com.sparta.spartime.dto.response.TokenResponseDto;
 import com.sparta.spartime.entity.User;
 import com.sparta.spartime.exception.BusinessException;
 import com.sparta.spartime.exception.ErrorCode;
@@ -25,7 +26,7 @@ public class AuthService {
     private final UserService userService;
 
     @Transactional
-    public LoginResponseDto login(UserLoginRequestDto requestDto) {
+    public TokenResponseDto login(UserLoginRequestDto requestDto) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -43,7 +44,7 @@ public class AuthService {
 
             user.addRefreshToken(refreshToken);
 
-            return new LoginResponseDto(accessToken, refreshToken);
+            return new TokenResponseDto(accessToken, refreshToken);
         } catch (LockedException e) {
             throw new BusinessException(ErrorCode.USER_BLOCKED);
         } catch (DisabledException e) {
@@ -52,4 +53,31 @@ public class AuthService {
             throw new BusinessException(ErrorCode.FAIL_AUTHENTICATION);
         }
     }
+
+    @Transactional
+    public TokenResponseDto reIssueToken(TokenReIssueRequestDto requestDto) {
+        String refreshToken = requestDto.getRefreshToken();
+
+        if (!jwtService.isTokenValidate(refreshToken)) {
+            throw new BusinessException(ErrorCode.INVALID_REFRESH_TOKEN);
+        }
+
+        User user = userService.findByRefreshToken(refreshToken);
+
+        String newAccessToken = jwtService.createAccessToken(user.getId(), user.getEmail(), user.getRole(), user.getStatus(), user.getNickname());
+        String newRefreshToken = jwtService.createRefreshToken();
+
+        user.addRefreshToken(newRefreshToken);
+
+        return new TokenResponseDto(newAccessToken, newRefreshToken);
+    }
+
+    /*
+    1. 클라이언트 -> 서버에 반드시 AT를 전달해서 동작한다.
+    2. AT가 만료되면 커스텀 상태 코드를 받고
+    3. reissue API 를 요청한다. 이 때 RT도 같이 보낸다.
+    4. RT를 받아서 DB에 있는 RT와 일치한지 조회한 후
+    5. 일치하면 AT을 재발행한다.
+    6. 클라이언트는 새로운 AT를 활용해서 1번 요청을 재요청 한다.
+     */
 }
