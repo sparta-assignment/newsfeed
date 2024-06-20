@@ -2,7 +2,6 @@ package com.sparta.spartime.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.Comments;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -27,7 +26,7 @@ public class Like {
 
     public enum ReferenceType {
         POST,
-        COMMENT;
+        COMMENT
     }
 
     public Like(User user , Post post){
