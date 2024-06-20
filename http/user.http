@@ -10,4 +10,13 @@ Content-Type: application/json
   "nickname": "nickname"
 }
 
+### 회원탈퇴
+POST localhost:8080/api/users/1
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "password": "qwer1234!"
+}
+
 

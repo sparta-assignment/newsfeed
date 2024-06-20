@@ -51,4 +51,8 @@ public class User extends TimeStamp {
     public boolean isActivity() {
         return this.status == Status.ACTIVITY;
     }
+
+    public void withdraw() {
+        this.status = Status.INACTIVITY;
+    }
 }
