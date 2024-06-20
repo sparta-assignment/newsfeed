@@ -33,12 +33,11 @@ public class PostService {
         return new PostResponseDto(post,Post.Type.ANONYMOUS );
     }
 
-    public Page<PostResponseDto> getPage(int page,int size,String type) {
+    public Page<PostResponseDto> getPage(int page, int size, String type) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        Post.Type posttype = Post.Type.valueOf(type.toUpperCase());
         if (!type.isEmpty()) {
-           return postrepository.findByType(posttype)
-                   .map(post -> new PostResponseDto(post, posttype));
+            Post.Type postType = Post.Type.valueOf(type.toUpperCase());
+            return postrepository.findByType(postType, pageRequest).map(post -> new PostResponseDto(post, postType));
         } else {
             return postrepository.findAll(pageRequest).map(PostResponseDto::new);
         }

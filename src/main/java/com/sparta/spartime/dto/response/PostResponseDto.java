@@ -1,10 +1,13 @@
 package com.sparta.spartime.dto.response;
 
 import com.sparta.spartime.entity.Post;
-import com.sparta.spartime.entity.User;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
+@Getter
+@AllArgsConstructor
 public class PostResponseDto {
 
     private final Long id;
