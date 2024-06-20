@@ -1,5 +1,6 @@
 package com.sparta.spartime.web.controller;
 
+import com.sparta.spartime.aop.envelope.Envelope;
 import com.sparta.spartime.dto.request.UserLoginRequestDto;
 import com.sparta.spartime.dto.response.LoginResponseDto;
 import com.sparta.spartime.security.principal.UserPrincipal;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     private final AuthService authService;
 
+    @Envelope
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody UserLoginRequestDto requestDto) {
         return ResponseEntity.ok(authService.login(requestDto));

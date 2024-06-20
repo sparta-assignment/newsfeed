@@ -8,8 +8,8 @@ Content-Type: application/json
 }
 
 > {%
-client.global.set("access_token", response.body.accessToken)
-client.global.set("refresh_token", response.body.refreshToken)
+client.global.set("access_token", response.body.data.accessToken)
+client.global.set("refresh_token", response.body.data.refreshToken)
  %}
 
 ### Test
