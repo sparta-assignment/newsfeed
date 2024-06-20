@@ -30,14 +30,15 @@ public class PostService {
     public PostResponseDto createAnonymous(PostRequestDto requestDto ,User user) {
         Post post = new Post(requestDto, Post.Type.ANONYMOUS, user);
         postrepository.save(post);
-        return new PostResponseDto(post);
+        return new PostResponseDto(post,Post.Type.ANONYMOUS );
     }
 
     public Page<PostResponseDto> getPage(int page,int size,String type) {
         PageRequest pageRequest = PageRequest.of(page, size);
         Post.Type posttype = Post.Type.valueOf(type.toUpperCase());
         if (!type.isEmpty()) {
-           return postrepository.findByType(posttype);
+           return postrepository.findByType(posttype)
+                   .map(post -> new PostResponseDto(post, posttype));
         } else {
             return postrepository.findAll(pageRequest).map(PostResponseDto::new);
         }
