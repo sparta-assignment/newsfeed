@@ -19,6 +19,9 @@ public class Post extends TimeStamp {
 
     private String contents;
 
+    @Column(name = "likes", columnDefinition = "bigint default 0")
+    private Long likes;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -40,10 +43,15 @@ public class Post extends TimeStamp {
         this.contents = requestDto.getContent();
         this.type = type;
         this.user = user;
+        this.likes = 0L;
     }
 
     public void update(PostRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.contents = requestDto.getContent();
+    }
+
+    public void Likes(Long likes) {
+        this.likes = likes;
     }
 }
