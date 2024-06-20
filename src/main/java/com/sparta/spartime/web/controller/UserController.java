@@ -24,8 +24,8 @@ public class UserController {
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<String> withdraw(@PathVariable Long id, @RequestBody UserWithdrawRequestDto requestDto, @AuthenticationPrincipal UserPrincipal userPrincipal) {
+    public ResponseEntity withdraw(@PathVariable Long id, @RequestBody UserWithdrawRequestDto requestDto, @AuthenticationPrincipal UserPrincipal userPrincipal) {
         userService.withdraw(id, requestDto, userPrincipal);
-        return ResponseEntity.status(HttpStatus.OK).body("회원탈퇴가 정상 처리되었습니다.");
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
