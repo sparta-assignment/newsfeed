@@ -3,6 +3,7 @@ package com.sparta.spartime.web.exception.handler;
 import com.sparta.spartime.dto.response.EnvelopeResponse;
 import com.sparta.spartime.exception.BusinessException;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +14,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.stream.Collectors;
 
-@Order(1)
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
-    @ExceptionHandler
+    @ExceptionHandler(BusinessException.class)
     public ResponseEntity<?> handleBusinessException(BusinessException ex, HttpServletRequest request) {
         return EnvelopeResponse.wrapError(
                 ex.getStatus(),
@@ -35,6 +36,16 @@ public class GlobalExceptionHandler {
         return EnvelopeResponse.wrapError(
                 HttpStatus.BAD_REQUEST,
                 errorMessage,
+                request.getRequestURI()
+        );
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<?> handleUnhandledException(Exception e, HttpServletRequest request) {
+        log.info("", e);
+        return EnvelopeResponse.wrapError(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
                 request.getRequestURI()
         );
     }
