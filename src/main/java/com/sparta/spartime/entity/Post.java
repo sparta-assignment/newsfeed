@@ -3,11 +3,14 @@ package com.sparta.spartime.entity;
 import com.sparta.spartime.dto.request.PostRequestDto;
 import com.sparta.spartime.entity.common.TimeStamp;
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Entity
 @Getter
 @Table(name = "posts")
+@Builder
 public class Post extends TimeStamp {
 
     @Id
@@ -30,9 +33,6 @@ public class Post extends TimeStamp {
         ANONYMOUS,
         NORMAL,
         NOTICE
-    }
-
-    public Post() {
     }
 
     public Post(PostRequestDto requestDto,Type type,User user) {
