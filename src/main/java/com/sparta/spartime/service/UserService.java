@@ -5,6 +5,8 @@ import com.sparta.spartime.dto.request.UserSignupRequestDto;
 import com.sparta.spartime.dto.request.UserWithdrawRequestDto;
 import com.sparta.spartime.dto.response.UserResponseDto;
 import com.sparta.spartime.entity.User;
+import com.sparta.spartime.exception.BusinessException;
+import com.sparta.spartime.exception.ErrorCode;
 import com.sparta.spartime.repository.UserRepository;
 import com.sparta.spartime.security.principal.UserPrincipal;
 import com.sparta.spartime.web.argumentResolver.annotation.LoginUser;
@@ -92,13 +94,19 @@ public class UserService {
 
     private User findById(Long id) {
         return userRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("사용자를 찾을 수 없습니다.")
+                new BusinessException(ErrorCode.USER_NOT_FOUND)
         );
     }
 
     protected User findByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(() ->
-                new IllegalArgumentException("사용자를 찾을 수 없습니다.")
+                new BusinessException(ErrorCode.USER_NOT_FOUND)
+        );
+    }
+
+    protected User findByRefreshToken(String refreshToken) {
+        return userRepository.findByRefreshToken(refreshToken).orElseThrow(() ->
+                new BusinessException(ErrorCode.USER_NOT_FOUND)
         );
     }
 }
