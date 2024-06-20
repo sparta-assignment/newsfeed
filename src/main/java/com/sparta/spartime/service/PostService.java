@@ -85,7 +85,7 @@ public class PostService {
         Post post = getPost(postId);
 
         // 좋아요
-        Like like = likeRepository.findByUserIdAndReferenceTypeAndReferenceId(user.getId(), Like.ReferenceType.POST, postId).orElseThrow(
+        Like like = likeRepository.findByUserIdAndReferenceTypeAndRefId(user.getId(), Like.ReferenceType.POST, postId).orElseThrow(
                 () -> new IllegalArgumentException("좋아요를 누르지 않았습니다.")
         );
         likeRepository.delete(like);

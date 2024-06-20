@@ -8,6 +8,6 @@ import java.util.Optional;
 
 public interface LikeRepository extends JpaRepository<Like, Long> {
     boolean existsByUser_IdAndReferenceTypeAndRefId(Long userId, Like.ReferenceType referenceType, Long refId);
-    Optional<Like> findByUserIdAndReferenceTypeAndReferenceId(Long userId, Like.ReferenceType referenceType, Long referenceId);
+    Optional<Like> findByUserIdAndReferenceTypeAndRefId(Long userId, Like.ReferenceType referenceType, Long referenceId);
 
 }
