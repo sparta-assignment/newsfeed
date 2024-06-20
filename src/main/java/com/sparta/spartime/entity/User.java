@@ -52,9 +52,18 @@ public class User extends TimeStamp {
         return this.status == Status.ACTIVITY;
     }
 
+    public void addRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
+    public void deleteRefreshToken() {
+        this.refreshToken = null;
+    }
+
     public void withdraw() {
         this.status = Status.INACTIVITY;
     }
+
 
     public void editProfile(String newPassword, String newNickname, String newIntro) {
         if (newPassword != null && !newPassword.isEmpty() && !this.password.equals(newPassword)) {
