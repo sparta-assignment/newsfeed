@@ -3,8 +3,10 @@ package com.sparta.spartime.web.controller;
 import com.sparta.spartime.aop.envelope.Envelope;
 import com.sparta.spartime.dto.request.UserLoginRequestDto;
 import com.sparta.spartime.dto.response.LoginResponseDto;
+import com.sparta.spartime.entity.User;
 import com.sparta.spartime.security.principal.UserPrincipal;
 import com.sparta.spartime.service.AuthService;
+import com.sparta.spartime.web.argumentResolver.annotation.LoginUser;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,11 +33,11 @@ public class AuthController {
     }
 
     @GetMapping("/test")
-    public ResponseEntity<?> test(@AuthenticationPrincipal UserPrincipal userPrincipal) {
-        log.info("id: {}", userPrincipal.getUser().getId());
-        log.info("email: {}", userPrincipal.getUser().getEmail());
-        log.info("nickname: {}", userPrincipal.getUser().getNickname());
-        log.info("status: {}", userPrincipal.getUser().getStatus());
+    public ResponseEntity<?> test(@LoginUser User user) {
+        log.info("id: {}", user.getId());
+        log.info("email: {}", user.getEmail());
+        log.info("nickname: {}", user.getNickname());
+        log.info("status: {}", user.getStatus());
         return ResponseEntity.ok("");
     }
 }
