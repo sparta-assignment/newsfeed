@@ -46,6 +46,9 @@ public class PostService {
 
     public PostResponseDto get(Long postId) {
         Post post = getPost(postId);
+        if (post.getType() == Post.Type.ANONYMOUS) {
+            return new PostResponseDto(post,Post.Type.ANONYMOUS);
+        }
         return new PostResponseDto(post);
     }
 
@@ -59,9 +62,8 @@ public class PostService {
         return new PostResponseDto(post);
     }
 
-
     @Transactional
-    public void delete(PostRequestDto requestDto,Long postId,User user) {
+    public void delete(Long postId,User user) {
         Post post = getPost(postId);
         userCheck(user, post);
         postrepository.delete(post);
@@ -76,6 +78,7 @@ public class PostService {
             throw new IllegalArgumentException("이미 좋아요를 눌렀습니다");
         }
         Like like = new Like(user,post);
+        post.Likes(post.getLikes()+1);
         likeRepository.save(like);
     }
 
@@ -87,6 +90,7 @@ public class PostService {
         Like like = likeRepository.findByUserIdAndReferenceTypeAndRefId(user.getId(), Like.ReferenceType.POST, postId).orElseThrow(
                 () -> new IllegalArgumentException("좋아요를 누르지 않았습니다.")
         );
+        post.Likes(post.getLikes()-1);
         likeRepository.delete(like);
     }
 
