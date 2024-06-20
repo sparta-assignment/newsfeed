@@ -31,5 +31,10 @@ Authorization: Bearer {{access_token}}
   "newIntro": ""
 }
 
+### 프로필 조회
+GET localhost:8080/api/users/1
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
 
 
