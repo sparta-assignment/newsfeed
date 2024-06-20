@@ -40,4 +40,10 @@ public class UserController {
     public ResponseEntity<UserResponseDto> editProfile(@PathVariable Long id, @Valid @RequestBody UserEditProfileRequestDto requestDto, @LoginUser User loginUser) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.editProfile(id, requestDto, loginUser));
     }
+
+    @GetMapping("/{id}")
+    @Envelope("사용자 조회에 성공했습니다.")
+    public ResponseEntity<UserResponseDto> getProfile(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getProfile(id));
+    }
 }

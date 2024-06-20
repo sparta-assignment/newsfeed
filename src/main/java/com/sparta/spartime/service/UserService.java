@@ -86,6 +86,10 @@ public class UserService {
         return new UserResponseDto(user);
     }
 
+    public UserResponseDto getProfile(Long id) {
+        return new UserResponseDto(findById(id));
+    }
+
     private User findById(Long id) {
         return userRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("사용자를 찾을 수 없습니다.")
