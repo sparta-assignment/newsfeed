@@ -1,4 +1,4 @@
-package com.sparta.spartime.service;
+package com.sparta.spartime.security.service;
 
 import com.sparta.spartime.entity.User;
 import io.jsonwebtoken.*;

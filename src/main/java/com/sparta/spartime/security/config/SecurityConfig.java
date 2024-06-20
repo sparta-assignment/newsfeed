@@ -3,7 +3,7 @@ package com.sparta.spartime.security.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.spartime.security.exception.AccessDeniedHandlerImpl;
 import com.sparta.spartime.security.filter.AuthenticationFilter;
-import com.sparta.spartime.service.JwtService;
+import com.sparta.spartime.security.service.JwtService;
 import com.sparta.spartime.web.filter.transaction.TransactionFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
