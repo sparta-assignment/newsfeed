@@ -1,6 +1,7 @@
 package com.sparta.spartime.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.sparta.spartime.web.interceptor.transaction.TransactionIdHolder;
 import lombok.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,19 +18,21 @@ public class EnvelopeResponse {
     private String message;
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String path;
+    private String trId;
 
     private EnvelopeResponse(Object data, int status, String message) {
         this.data = data;
         this.status = status;
         this.message = message;
+        this.trId = TransactionIdHolder.getTrId();
     }
 
     private EnvelopeResponse(int status, String message, String path) {
         this.status = status;
         this.message = message;
         this.path = path;
+        this.trId = TransactionIdHolder.getTrId();
     }
-
 
     public static ResponseEntity<?> wrap(Object data, HttpStatus status, String message) {
         return ResponseEntity

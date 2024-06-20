@@ -1,5 +1,7 @@
 package com.sparta.spartime.security.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparta.spartime.security.exception.AccessDeniedHandlerImpl;
 import com.sparta.spartime.security.filter.AuthenticationFilter;
 import com.sparta.spartime.service.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
+    private final ObjectMapper objectMapper;
 
     private final JwtService jwtService;
 
@@ -42,6 +45,9 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
         http.formLogin(AbstractHttpConfigurer::disable);
         http.httpBasic(AbstractHttpConfigurer::disable);
+
+        http.exceptionHandling(handler ->
+                handler.accessDeniedHandler(new AccessDeniedHandlerImpl(objectMapper)));
 
         http.authorizeHttpRequests(requests -> requests
 //                 .requestMatchers("/api/admin/**").hasAnyRole(User.Role.ADMIN)
