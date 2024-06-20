@@ -6,7 +6,7 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Entity
-@Table
+@Table(name = "follows")
 @Getter
 public class Follow {
     @Id

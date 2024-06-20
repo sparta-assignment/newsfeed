@@ -4,6 +4,7 @@ import com.sparta.spartime.entity.common.TimeStamp;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "posts")
 public class Post extends TimeStamp {
 
     @Id

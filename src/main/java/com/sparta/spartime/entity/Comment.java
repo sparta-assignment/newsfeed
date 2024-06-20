@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table
+@Table(name = "comments")
 @Getter
 public class Comment extends TimeStamp {
 
