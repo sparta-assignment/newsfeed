@@ -5,6 +5,8 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
@@ -26,8 +28,14 @@ public class EnvelopeAspect {
         if (!(result instanceof ResponseEntity<?> responseEntity)) {
             return result;
         }
+
+        HttpStatusCode statusCode = responseEntity.getStatusCode();
+        HttpStatusCode ResponseStatusCode = statusCode == HttpStatus.NO_CONTENT
+                ?  HttpStatus.OK
+                :  statusCode;
+
         return ResponseEntity
-                .status(responseEntity.getStatusCode())
+                .status(ResponseStatusCode)
                 .body(
                         new EnvelopeResponse<>(
                                 responseEntity.getBody(),
@@ -35,7 +43,6 @@ public class EnvelopeAspect {
                                 msg
                         )
                 );
-
     }
 
     private String getMessage(Envelope envelopeAnnotation, String methodName) {
