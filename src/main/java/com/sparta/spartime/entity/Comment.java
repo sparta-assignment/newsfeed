@@ -26,4 +26,8 @@ public class Comment extends TimeStamp {
     private User user;
 
     private String contents;
+
+    public void updateComment(String contents) {
+        this.contents = contents;
+    }
 }

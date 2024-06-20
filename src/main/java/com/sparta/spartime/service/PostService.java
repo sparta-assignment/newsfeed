@@ -99,7 +99,7 @@ public class PostService {
 
     //:::::::::::::::::::// 도구 //::::::::::::::::::://
 
-    private Post getPost(Long postId) {
+    public Post getPost(Long postId) {
         return postrepository.findById(postId).orElseThrow(
                 () -> new IllegalArgumentException("없는 게시글 입니다.")
         );
