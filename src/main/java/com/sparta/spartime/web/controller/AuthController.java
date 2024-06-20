@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     private final AuthService authService;
 
-    @Envelope
+    @Envelope("login 성공")
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody UserLoginRequestDto requestDto) {
         return ResponseEntity.ok(authService.login(requestDto));

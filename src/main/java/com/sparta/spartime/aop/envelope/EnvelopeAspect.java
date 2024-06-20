@@ -13,12 +13,14 @@ import java.lang.reflect.Method;
 @Aspect
 @Component
 public class EnvelopeAspect {
-    @Around("@annotation(com.sparta.spartime.aop.envelope.Envelope)")
+    @Around("execution(* com.sparta.spartime.web.controller..*(..))")
     public Object envelopeResponse(ProceedingJoinPoint joinPoint) throws Throwable {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
         Envelope envelopeAnnotation = method.getAnnotation(Envelope.class);
-        String msg = envelopeAnnotation.value().isBlank() ? method.getName() + " ok" : envelopeAnnotation.value();
+
+        String msg = getMessage(envelopeAnnotation, method.getName());
+
         Object result = joinPoint.proceed();
 
         if (!(result instanceof ResponseEntity<?> responseEntity)) {
@@ -34,5 +36,12 @@ public class EnvelopeAspect {
                         )
                 );
 
+    }
+
+    private String getMessage(Envelope envelopeAnnotation, String methodName) {
+        if (envelopeAnnotation == null ) {
+            return methodName + " ok";
+        }
+        return envelopeAnnotation.value();
     }
 }
