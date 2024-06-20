@@ -24,8 +24,21 @@ public class Like {
 
     private Long refId;
 
-    private enum ReferenceType {
+    public enum ReferenceType {
         POST,
-        COMMENT;
+        COMMENT
     }
+
+    public Like(User user , Post post){
+        this.user = user;
+        this.referenceType = ReferenceType.POST;
+        this.refId = post.getId();
+    }
+
+    public Like(User user , Comment comment){
+        this.user = user;
+        this.referenceType = ReferenceType.COMMENT;
+        this.refId = comment.getId();
+    }
+
 }
