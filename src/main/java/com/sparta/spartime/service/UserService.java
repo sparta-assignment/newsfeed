@@ -48,21 +48,21 @@ public class UserService {
     @Transactional
     public void withdraw(Long id, UserWithdrawRequestDto requestDto, UserPrincipal userPrincipal) {
         User idUser = findById(id);
-        User pricipalUser = findByEmail(userPrincipal.getUsername());
+        User user = findByEmail(userPrincipal.getUsername());
 
-        if (!idUser.getEmail().equals(pricipalUser.getEmail())) {
+        if (!idUser.getEmail().equals(user.getEmail())) {
             throw new IllegalIdentifierException("요청된 사용자와 로그인된 사용자의 정보가 일치하지 않습니다.");
         }
 
-        if (!passwordEncoder.matches(requestDto.getPassword(), pricipalUser.getPassword())) {
+        if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("입력된 비밀번호가 사용자의 비밀번호와 일치하지 않습니다");
         }
 
-        if (pricipalUser.getStatus().equals(User.Status.INACTIVITY)) {
+        if (user.getStatus().equals(User.Status.INACTIVITY)) {
             throw new IllegalArgumentException("이미 회원탈퇴된 사용자입니다.");
         }
 
-        pricipalUser.withdraw();
+        user.withdraw();
     }
 
     @Transactional
@@ -96,7 +96,7 @@ public class UserService {
         );
     }
 
-    private User findByEmail(String email) {
+    protected User findByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(() ->
                 new IllegalArgumentException("사용자를 찾을 수 없습니다.")
         );
