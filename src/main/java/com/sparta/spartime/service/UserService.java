@@ -92,6 +92,12 @@ public class UserService {
         return new UserResponseDto(findById(id));
     }
 
+    @Transactional
+    public void logout(User loginUser) {
+        User user = findById(loginUser.getId());
+        user.deleteRefreshToken();
+    }
+
     private User findById(Long id) {
         return userRepository.findById(id).orElseThrow(() ->
                 new BusinessException(ErrorCode.USER_NOT_FOUND)

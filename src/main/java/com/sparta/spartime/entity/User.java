@@ -66,6 +66,7 @@ public class User extends TimeStamp {
 
     public void withdraw() {
         this.status = Status.INACTIVITY;
+        deleteRefreshToken();
         delete();
     }
 

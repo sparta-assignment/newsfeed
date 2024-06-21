@@ -36,5 +36,7 @@ GET localhost:8080/api/users/1
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
-
-
+### 로그아웃
+DELETE localhost:8080/api/users
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
