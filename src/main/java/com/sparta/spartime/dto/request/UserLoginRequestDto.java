@@ -12,4 +12,8 @@ public class UserLoginRequestDto {
             message = "비밀 번호 형식을 맞춰주세요")
     private String password;
 
+    public UserLoginRequestDto(String email , String password){
+        this.email = email;
+        this.password = password;
+    }
 }
