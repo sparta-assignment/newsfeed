@@ -1,7 +1,7 @@
 package com.sparta.spartime.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.sparta.spartime.web.interceptor.transaction.TransactionIdHolder;
+import com.sparta.spartime.web.filter.transaction.TransactionIdHolder;
 import lombok.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

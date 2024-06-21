@@ -36,7 +36,7 @@ public class CommentService {
     }
 
     public List<CommentResponseDto> getComments(Long postId) {
-        List<Comment> comments = commentRepository.findAllByPost_Id(postId).orElseThrow(
+        List<Comment> comments = commentRepository.findAllByPostId(postId).orElseThrow(
                 () -> new BusinessException(ErrorCode.COMMENT_NOT_FOUND)
         );
         return comments.stream()
@@ -59,7 +59,7 @@ public class CommentService {
     }
 
     public Comment findComment(Long postId, Long commentId) {
-        return commentRepository.findByIdAndPost_Id(commentId, postId).orElseThrow(
+        return commentRepository.findByIdAndPostId(commentId, postId).orElseThrow(
                 () -> new BusinessException(ErrorCode.COMMENT_NOT_FOUND)
         );
     }

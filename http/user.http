@@ -4,7 +4,7 @@ POST localhost:8080/api/users
 Content-Type: application/json
 
 {
-  "email": "test@gmail.com",
+  "email": "email@gmail.com",
   "password": "qwer1234!",
   "intro": "intro",
   "nickname": "nickname"
@@ -25,8 +25,8 @@ Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 {
-  "password": "qwer1234!@",
-  "newPassword": "qwer1234!",
+  "password": "qwer1234!",
+  "newPassword": "qwer1234!@",
   "newNickname": "별명 수정 테스트",
   "newIntro": ""
 }
@@ -36,5 +36,7 @@ GET localhost:8080/api/users/1
 Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
-
-
+### 로그아웃
+DELETE localhost:8080/api/users
+Content-Type: application/json
+Authorization: Bearer {{access_token}}

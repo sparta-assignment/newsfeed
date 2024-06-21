@@ -2,8 +2,10 @@ package com.sparta.spartime.security.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.spartime.security.exception.AccessDeniedHandlerImpl;
+import com.sparta.spartime.security.exception.AuthenticationEntryPointImpl;
 import com.sparta.spartime.security.filter.AuthenticationFilter;
-import com.sparta.spartime.service.JwtService;
+import com.sparta.spartime.security.service.JwtService;
+import com.sparta.spartime.web.filter.transaction.TransactionFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -45,16 +47,19 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
         http.formLogin(AbstractHttpConfigurer::disable);
         http.httpBasic(AbstractHttpConfigurer::disable);
+//        http.userDetailsService(userDetailsService);
 
-        http.exceptionHandling(handler ->
-                handler.accessDeniedHandler(new AccessDeniedHandlerImpl(objectMapper)));
+        http.exceptionHandling(handler -> {
+                    handler.accessDeniedHandler(new AccessDeniedHandlerImpl(objectMapper));
+                    handler.authenticationEntryPoint(new AuthenticationEntryPointImpl(objectMapper));
+                }
+        );
 
         http.authorizeHttpRequests(requests -> requests
-//                 .requestMatchers("/api/admin/**").hasAnyRole(User.Role.ADMIN)
                         .requestMatchers("api/users").permitAll()
-                        .requestMatchers(HttpMethod.GET,"api/posts/**").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/api/auth/login").permitAll()
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "api/posts/**").permitAll().requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/reissue").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/admin/posts").permitAll()
                         .anyRequest().authenticated()
         );
 
@@ -62,7 +67,8 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         );
 
-        http.addFilterAt(authenticationFilter(jwtService), BasicAuthenticationFilter.class);
+        http.addFilterAt(new TransactionFilter(), BasicAuthenticationFilter.class);
+        http.addFilterAt(authenticationFilter(jwtService), TransactionFilter.class);
 
         return http.build();
     }

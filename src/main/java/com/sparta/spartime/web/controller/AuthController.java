@@ -1,8 +1,9 @@
 package com.sparta.spartime.web.controller;
 
 import com.sparta.spartime.aop.envelope.Envelope;
+import com.sparta.spartime.dto.request.TokenReIssueRequestDto;
 import com.sparta.spartime.dto.request.UserLoginRequestDto;
-import com.sparta.spartime.dto.response.LoginResponseDto;
+import com.sparta.spartime.dto.response.TokenResponseDto;
 import com.sparta.spartime.exception.BusinessException;
 import com.sparta.spartime.exception.ErrorCode;
 import com.sparta.spartime.service.AuthService;
@@ -21,13 +22,13 @@ public class AuthController {
 
     @Envelope("login 성공")
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody UserLoginRequestDto requestDto) {
+    public ResponseEntity<TokenResponseDto> login(@Valid @RequestBody UserLoginRequestDto requestDto) {
         return ResponseEntity.ok(authService.login(requestDto));
     }
 
     @PostMapping("/reissue")
-    public ResponseEntity<?> reIssueAccessToken() {
-        return null;
+    public ResponseEntity<TokenResponseDto> reIssueAccessToken(@Valid @RequestBody TokenReIssueRequestDto requestDto) {
+        return ResponseEntity.ok(authService.reIssueToken(requestDto));
     }
 
     @GetMapping("/test")

@@ -36,6 +36,14 @@ public class User extends TimeStamp {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    public void changeRole(Role role) {
+        this.role = role;
+    }
+
+    public void changeStatus(Status status) {
+        this.status = status;
+    }
+
     public enum Role {
         USER,
         ADMIN
@@ -66,7 +74,12 @@ public class User extends TimeStamp {
 
     public void withdraw() {
         this.status = Status.INACTIVITY;
+        deleteRefreshToken();
         delete();
+    }
+
+    public void updateRecentPassword(String updatePasswordList) {
+        this.recentPassword = updatePasswordList;
     }
 
     public void editProfile(String newPassword, String newNickname, String newIntro) {

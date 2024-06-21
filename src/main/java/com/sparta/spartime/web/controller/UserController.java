@@ -46,4 +46,11 @@ public class UserController {
     public ResponseEntity<UserResponseDto> getProfile(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getProfile(id));
     }
+
+    @DeleteMapping
+    @Envelope("로그아웃 되었습니다.")
+    public ResponseEntity<Void> logout(@LoginUser User user) {
+        userService.logout(user);
+        return ResponseEntity.noContent().build();
+    }
 }
