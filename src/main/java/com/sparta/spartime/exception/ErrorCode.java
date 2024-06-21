@@ -31,6 +31,10 @@ public enum ErrorCode {
     // like
     LIKE_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "이미 좋아요를 눌렀습니다."),
     LIKE_NOT_FOUND(HttpStatus.BAD_REQUEST, "좋아요가 눌리지 않았습니다."),
+
+    // follow
+    ALREADY_FOLLOW(HttpStatus.BAD_REQUEST, "팔로우 중인 사용자입니다."),
+    NOT_FOLLOWING(HttpStatus.BAD_REQUEST, "팔로우 중인 사용자가 아닙니다.")
     ;
 
     private final HttpStatus status;
