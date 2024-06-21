@@ -53,9 +53,9 @@ public class PostContrller {
     }
 
     @DeleteMapping("/{postId}")
-    public ResponseEntity<?> delete(@Valid @RequestBody PostRequestDto requestDto, @PathVariable Long postId,
+    public ResponseEntity<?> delete( @PathVariable Long postId,
                                     @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        postService.delete(requestDto,postId,userPrincipal.getUser());
+        postService.delete(postId,userPrincipal.getUser());
         return ResponseEntity.noContent().build();
     }
 
