@@ -25,8 +25,8 @@ Content-Type: application/json
 Authorization: Bearer {{access_token}}
 
 {
-  "password": "qwer1234!@",
-  "newPassword": "qwer1234!",
+  "password": "qwer1234!",
+  "newPassword": "qwer1234!@",
   "newNickname": "별명 수정 테스트",
   "newIntro": ""
 }

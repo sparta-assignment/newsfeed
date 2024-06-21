@@ -70,6 +70,10 @@ public class User extends TimeStamp {
         delete();
     }
 
+    public void updateRecentPassword(String updatePasswordList) {
+        this.recentPassword = updatePasswordList;
+    }
+
     public void editProfile(String newPassword, String newNickname, String newIntro) {
         if (newPassword != null && !newPassword.isEmpty() && !this.password.equals(newPassword)) {
             this.password = newPassword;
