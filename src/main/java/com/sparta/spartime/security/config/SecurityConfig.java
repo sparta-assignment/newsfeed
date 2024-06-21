@@ -2,6 +2,7 @@ package com.sparta.spartime.security.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.spartime.security.exception.AccessDeniedHandlerImpl;
+import com.sparta.spartime.security.exception.AuthenticationEntryPointImpl;
 import com.sparta.spartime.security.filter.AuthenticationFilter;
 import com.sparta.spartime.security.service.JwtService;
 import com.sparta.spartime.web.filter.transaction.TransactionFilter;
@@ -47,8 +48,11 @@ public class SecurityConfig {
         http.formLogin(AbstractHttpConfigurer::disable);
         http.httpBasic(AbstractHttpConfigurer::disable);
 
-        http.exceptionHandling(handler ->
-                handler.accessDeniedHandler(new AccessDeniedHandlerImpl(objectMapper)));
+        http.exceptionHandling(handler -> {
+                    handler.accessDeniedHandler(new AccessDeniedHandlerImpl(objectMapper));
+                    handler.authenticationEntryPoint(new AuthenticationEntryPointImpl(objectMapper));
+                }
+        );
 
         http.authorizeHttpRequests(requests -> requests
 //                 .requestMatchers("/api/admin/**").hasAnyRole(User.Role.ADMIN)
