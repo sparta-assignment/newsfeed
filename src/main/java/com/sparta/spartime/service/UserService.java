@@ -16,6 +16,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -31,7 +34,7 @@ public class UserService {
         String intro = requestDto.getIntro();
 
         if (userRepository.existsByEmailOrNickname(email, nickname)) {
-            throw new IllegalArgumentException("이미 존재함~");
+            throw new BusinessException(ErrorCode.EXIST_USER);
         }
 
         User user = User.builder()
@@ -53,15 +56,15 @@ public class UserService {
         User user = findByEmail(userPrincipal.getUsername());
 
         if (!idUser.getEmail().equals(user.getEmail())) {
-            throw new IllegalIdentifierException("요청된 사용자와 로그인된 사용자의 정보가 일치하지 않습니다.");
+            throw new BusinessException(ErrorCode.NOT_MATCHED_USER);
         }
 
         if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
-            throw new IllegalArgumentException("입력된 비밀번호가 사용자의 비밀번호와 일치하지 않습니다");
+            throw new BusinessException(ErrorCode.INVALID_PASSWORD);
         }
 
         if (user.getStatus().equals(User.Status.INACTIVITY)) {
-            throw new IllegalArgumentException("이미 회원탈퇴된 사용자입니다.");
+            throw new BusinessException(ErrorCode.USER_INACTIVITY);
         }
 
         user.withdraw();
@@ -70,13 +73,36 @@ public class UserService {
     @Transactional
     public UserResponseDto editProfile(Long id, UserEditProfileRequestDto requestDto, User loginUser) {
         if(!Objects.equals(id, loginUser.getId())) {
-            throw new IllegalArgumentException("요청된 사용자와 로그인된 사용자의 정보가 일치하지 않습니다.");
+            throw new BusinessException(ErrorCode.NOT_MATCHED_USER);
         }
 
         User user = findById(id);
 
         if(!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
-            throw new IllegalArgumentException("입력된 비밀번호가 사용자의 비밀번호와 일치하지 않습니다");
+            throw new BusinessException(ErrorCode.INVALID_PASSWORD);
+        }
+
+        if (requestDto.getNewPassword() != null) {
+            String recentPassword = user.getRecentPassword();
+            List<String> recentPasswordList;
+            if(recentPassword != null) {
+                recentPasswordList = new ArrayList<>(Arrays.asList(recentPassword.split(",")));
+            } else {
+                recentPasswordList = new ArrayList<>();
+            }
+
+            if(recentPasswordList.stream().anyMatch(recent -> passwordEncoder.matches(requestDto.getNewPassword(), recent))) {
+                throw new BusinessException(ErrorCode.RECENT_USED_PASSWORD);
+            }
+            for (String s : recentPasswordList) {
+                System.out.println(s);
+            }
+            recentPasswordList = recentPasswordList.subList(Math.max(recentPasswordList.size() - 2, 0), recentPasswordList.size());
+            recentPasswordList.add(user.getPassword());
+
+            String updatePasswordList = String.join(",", recentPasswordList);
+
+            user.updateRecentPassword(updatePasswordList);
         }
 
         String newPassword = passwordEncoder.encode(requestDto.getNewPassword());
