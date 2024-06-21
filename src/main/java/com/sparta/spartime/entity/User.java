@@ -36,6 +36,8 @@ public class User extends TimeStamp {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    private Long socialId;
+
     public void changeRole(Role role) {
         this.role = role;
     }
@@ -70,6 +72,12 @@ public class User extends TimeStamp {
 
     public void deleteRefreshToken() {
         this.refreshToken = null;
+    }
+
+    public User socialIdUpdate(Long socialId ) {
+        this.refreshToken = null;
+        this.socialId = socialId;
+        return this;
     }
 
     public void withdraw() {
