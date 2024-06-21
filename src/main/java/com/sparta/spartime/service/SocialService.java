@@ -3,9 +3,15 @@ package com.sparta.spartime.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparta.spartime.dto.request.UserLoginRequestDto;
+import com.sparta.spartime.dto.request.UserSignupRequestDto;
 import com.sparta.spartime.dto.response.KakaoUserInfoDto;
+import com.sparta.spartime.dto.response.TokenResponseDto;
 import com.sparta.spartime.entity.User;
+import com.sparta.spartime.exception.BusinessException;
+import com.sparta.spartime.exception.ErrorCode;
 import com.sparta.spartime.repository.UserRepository;
+import com.sparta.spartime.security.principal.UserPrincipal;
 import com.sparta.spartime.security.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,8 +19,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -28,6 +41,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class SocialService {
 
+    private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final RestTemplate restTemplate;
@@ -40,12 +54,8 @@ public class SocialService {
     private String redirectUri;
 
 
-
-    public void login(String code) throws JsonProcessingException {
-        // 1. 액세스 토큰
-        // 2. 토큰으로 카카오 API 호출
-        // 3. 필요시 카카오 로그인
-        // 4. 토큰 반환
+    @Transactional
+    public TokenResponseDto login(String code) throws JsonProcessingException {
 
         String accessToken = getToken(code);
 
@@ -53,12 +63,7 @@ public class SocialService {
 
         User User = registerKakaoUserIfNeeded(kakaoUserInfo);
 
-        jwtService.createAccessToken(
-                User.getId(),
-                User.getEmail(),
-                User.getRole(),
-                User.getStatus(),
-                User.getNickname());
+        return socialLogin(User);
     }
 
     private String getToken(String code) throws JsonProcessingException {
@@ -140,7 +145,7 @@ public class SocialService {
            User user = User.builder()
                     .email(kakaoUserInfo.getEmail())
                     .password(passwordEncoder.encode(password))
-                    .nickname(kakaoUserInfo.getEmail())
+                    .nickname(kakaoUserInfo.getNickname())
                     .role(User.Role.USER)
                     .status(User.Status.ACTIVITY)
                     .socialId(SocialId)
@@ -149,4 +154,17 @@ public class SocialService {
             return user;
         }
     }
+
+    @Transactional
+    public TokenResponseDto socialLogin(User user) {
+
+        String accessToken = jwtService.createAccessToken(user.getId(), user.getEmail(), user.getRole(), user.getStatus(), user.getNickname());
+
+        String refreshToken = jwtService.createRefreshToken();
+
+        user.addRefreshToken(refreshToken);
+
+        return new TokenResponseDto(accessToken, refreshToken);
+    }
+
 }
