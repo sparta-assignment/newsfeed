@@ -36,6 +36,14 @@ public class User extends TimeStamp {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    public void changeRole(Role role) {
+        this.role = role;
+    }
+
+    public void changeStatus(Status status) {
+        this.status = status;
+    }
+
     public enum Role {
         USER,
         ADMIN

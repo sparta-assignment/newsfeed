@@ -47,6 +47,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
         http.formLogin(AbstractHttpConfigurer::disable);
         http.httpBasic(AbstractHttpConfigurer::disable);
+//        http.userDetailsService(userDetailsService);
 
         http.exceptionHandling(handler -> {
                     handler.accessDeniedHandler(new AccessDeniedHandlerImpl(objectMapper));
@@ -55,12 +56,10 @@ public class SecurityConfig {
         );
 
         http.authorizeHttpRequests(requests -> requests
-//                 .requestMatchers("/api/admin/**").hasAnyRole(User.Role.ADMIN)
                         .requestMatchers("api/users").permitAll()
-                        .requestMatchers(HttpMethod.GET, "api/posts/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "api/posts/**").permitAll().requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/reissue").permitAll()
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/admin/posts").permitAll()
                         .anyRequest().authenticated()
         );
 
