@@ -124,7 +124,7 @@ public class UserService {
         user.deleteRefreshToken();
     }
 
-    private User findById(Long id) {
+    protected User findById(Long id) {
         return userRepository.findById(id).orElseThrow(() ->
                 new BusinessException(ErrorCode.USER_NOT_FOUND)
         );
