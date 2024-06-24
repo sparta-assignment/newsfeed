@@ -16,6 +16,7 @@
 # 📜 Table
 - [Team](#-Team)
 - [Tech Stack](#-Tech-Stack)
+- [Project Structure](#-Project-Structure)
 - [Feature](#-Feature)
 - [ERD](#-ERD)
 - [API Document](#-API-Document)
@@ -117,6 +118,41 @@
 |   Database   | ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white) <br/> ![MySQL](https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white) |   MySQL ver.8.0.28    |                                       -                                       |
 |    Record    |                                                       ![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white)                                                        |           -           | [Link](https://teamsparta.notion.site/13-Al-a5ef9a2f5c514f9aa607119d86621c8a) |
 
+[(Back to top)](#-table)
+
+<br/>
+
+## 🧱 Project Structure
+```
+Spartime
+src
+├── aop
+│   ├── envelop
+│   └── tracelog
+├── dto
+│   ├── request
+│   └── response
+├── entity
+│   └── common
+├── exception
+├── repository
+├── security
+│   ├── config
+│   ├── exception
+│   ├── filter
+│   ├── principal
+│   ├── service
+│   └── response
+├── service
+│   └── admin    
+└── web
+    ├── argumentResolver
+    ├── config
+    ├── controller
+    ├── exception
+    └── filter
+    
+```
 [(Back to top)](#-table)
 
 <br/>
