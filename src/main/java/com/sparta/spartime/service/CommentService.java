@@ -2,6 +2,7 @@ package com.sparta.spartime.service;
 
 import com.sparta.spartime.dto.request.CommentRequestDto;
 import com.sparta.spartime.dto.response.CommentResponseDto;
+import com.sparta.spartime.dto.response.PostResponseDto;
 import com.sparta.spartime.entity.Comment;
 import com.sparta.spartime.entity.Like;
 import com.sparta.spartime.entity.Post;
@@ -10,6 +11,8 @@ import com.sparta.spartime.exception.BusinessException;
 import com.sparta.spartime.exception.ErrorCode;
 import com.sparta.spartime.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -76,5 +79,9 @@ public class CommentService {
 
     public void unlikeComment(User user, Long commentId) {
         likeService.unlike(user, Like.ReferenceType.COMMENT, commentId);
+    }
+
+    public Page<CommentResponseDto> getLikedComments(int page, User user) {
+        return commentRepository.findCommentByLikeId(user, PageRequest.of(page-1, 5));
     }
 }
