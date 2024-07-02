@@ -57,7 +57,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(requests -> requests
                         .requestMatchers("api/users").permitAll()
-                        .requestMatchers(HttpMethod.GET, "api/posts/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "api/posts").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "api/users/login/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/reissue").permitAll()

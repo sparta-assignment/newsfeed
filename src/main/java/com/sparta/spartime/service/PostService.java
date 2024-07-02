@@ -10,6 +10,7 @@ import com.sparta.spartime.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -94,8 +95,9 @@ public class PostService {
         likeRepository.delete(like);
     }
 
-
-
+    public Page<PostResponseDto> getLikedPosts(int page, User user) {
+        return postrepository.findPostByLikeId(user, PageRequest.of(page-1, 5));
+    }
 
     //:::::::::::::::::::// 도구 //::::::::::::::::::://
 

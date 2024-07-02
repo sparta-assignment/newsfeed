@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -71,5 +72,11 @@ public class PostContrller {
                                     @AuthenticationPrincipal UserPrincipal userPrincipal) {
         postService.unlike(postId,userPrincipal.getUser());
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/like")
+    public ResponseEntity<Page<PostResponseDto>> getLikedPosts(@RequestParam("page") int page,
+                                    @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        return ResponseEntity.ok(postService.getLikedPosts(page, userPrincipal.getUser()));
     }
 }

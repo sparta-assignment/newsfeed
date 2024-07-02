@@ -40,15 +40,13 @@ Authorization: Bearer {{access_token}}
 
 ### post getPage
 GET http://localhost:8080/api/posts?page=1&size=10&type=NORMAL
-Authorization: Bearer {{access_token}}
+#Authorization: Bearer {{access_token}}
 
 
 ### post delete
 DELETE localhost:8080/api/posts/{{post_id}}
 Authorization: Bearer {{access_token}}
 
-
-
-
-
-
+### like post get
+GET localhost:8080/api/posts/like?page=1
+Authorization: Bearer {{access_token}}
