@@ -7,7 +7,6 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Getter
-@AllArgsConstructor
 public class PostResponseDto {
 
     private final Long id;
@@ -41,5 +40,14 @@ public class PostResponseDto {
         this.updatedAt = post.getUpdatedAt();
     }
 
-
+    public PostResponseDto(Long id, String title, String content, Long userId, Long likes, Post.Type type, String nickname, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.userId = userId;
+        this.likes = likes;
+        this.nickname = type == Post.Type.ANONYMOUS ? "ANONYMOUS" : nickname;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
 }

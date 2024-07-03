@@ -1,6 +1,9 @@
 package com.sparta.spartime.repository;
 
+import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.spartime.dto.response.CommentResponseDto;
@@ -32,6 +35,7 @@ public class PostCustomRepositoryImpl implements PostCustomRepository{
                         post.contents,
                         post.user.id,
                         post.likes,
+                        post.type,
                         post.user.nickname,
                         post.createdAt,
                         post.updatedAt
@@ -51,4 +55,5 @@ public class PostCustomRepositoryImpl implements PostCustomRepository{
 
         return PageableExecutionUtils.getPage(posts, pageable, () -> query.fetch().size());
     }
+
 }
