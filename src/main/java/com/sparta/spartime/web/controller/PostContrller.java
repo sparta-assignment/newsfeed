@@ -36,14 +36,14 @@ public class PostContrller {
 
     @GetMapping
     public ResponseEntity<Page<PostResponseDto>> getPage(
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) String type) {
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            @RequestParam(value = "type", required = false) String type) {
         return ResponseEntity.ok(postService.getPage(page-1,size,type));
     }
 
     @GetMapping("/{postId}")
-    public ResponseEntity<PostResponseDto> get(@PathVariable Long postId) {
+    public ResponseEntity<PostResponseDto> get(@PathVariable("postId") Long postId) {
         return ResponseEntity.ok(postService.get(postId));
     }
 
@@ -54,21 +54,21 @@ public class PostContrller {
     }
 
     @DeleteMapping("/{postId}")
-    public ResponseEntity<?> delete( @PathVariable Long postId,
+    public ResponseEntity<?> delete( @PathVariable("postId") Long postId,
                                     @AuthenticationPrincipal UserPrincipal userPrincipal) {
         postService.delete(postId,userPrincipal.getUser());
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/{postId}/like")
-    public ResponseEntity<?> like(@PathVariable Long postId,
+    public ResponseEntity<?> like(@PathVariable("postId") Long postId,
                                   @AuthenticationPrincipal UserPrincipal userPrincipal) {
         postService.like(postId,userPrincipal.getUser());
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{postId}/like")
-    public ResponseEntity<?> unlike(@PathVariable Long postId,
+    public ResponseEntity<?> unlike(@PathVariable("postId") Long postId,
                                     @AuthenticationPrincipal UserPrincipal userPrincipal) {
         postService.unlike(postId,userPrincipal.getUser());
         return ResponseEntity.noContent().build();

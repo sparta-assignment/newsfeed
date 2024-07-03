@@ -73,15 +73,25 @@ public class CommentService {
         }
     }
 
-    public void likeComment(User user, Long commentId) {
+    @Transactional
+    public void likeComment(User user, Long postId, Long commentId) {
+        Comment comment = findComment(postId, commentId);
+        comment.incrementLikes();
         likeService.like(user, Like.ReferenceType.COMMENT, commentId);
     }
 
-    public void unlikeComment(User user, Long commentId) {
+    @Transactional
+    public void unlikeComment(User user, Long postId, Long commentId) {
+        Comment comment = findComment(postId, commentId);
+        comment.decrementLikes();
         likeService.unlike(user, Like.ReferenceType.COMMENT, commentId);
     }
 
     public Page<CommentResponseDto> getLikedComments(int page, User user) {
         return commentRepository.findCommentByLikeId(user, PageRequest.of(page-1, 5));
+    }
+
+    public CommentResponseDto getComment(Long postId, Long commentId) {
+        return new CommentResponseDto(findComment(postId, commentId));
     }
 }
