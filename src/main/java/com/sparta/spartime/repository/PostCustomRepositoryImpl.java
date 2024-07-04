@@ -44,8 +44,8 @@ public class PostCustomRepositoryImpl implements PostCustomRepository{
                 .leftJoin(like)
                 .on(post.id.eq(like.refId))
                 .where(
-                        like.user.eq(user)
-                                .and(like.referenceType.eq(Like.ReferenceType.POST))
+                        like.user.eq(user),
+                        like.referenceType.eq(Like.ReferenceType.POST)
                 );
 
         List<PostResponseDto> posts = query.offset(pageable.getOffset())

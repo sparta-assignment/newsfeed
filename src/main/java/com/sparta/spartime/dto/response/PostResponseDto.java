@@ -24,7 +24,8 @@ public class PostResponseDto {
         this.content = post.getContents();
         this.likes = post.getLikes();
         this.userId = post.getUser().getId();
-        this.nickname = post.getUser().getNickname();
+//        this.nickname = post.getUser().getNickname();
+        this.nickname = post.getType() == Post.Type.ANONYMOUS ? "ANONYMOUS" : post.getUser().getNickname();
         this.createdAt = post.getCreatedAt();
         this.updatedAt = post.getUpdatedAt();
     }

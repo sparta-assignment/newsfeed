@@ -30,6 +30,7 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository{
                                 comment.id,
                                 comment.user.email,
                                 comment.contents,
+                                comment.likes,
                                 comment.createdAt,
                                 comment.updatedAt
                         ))

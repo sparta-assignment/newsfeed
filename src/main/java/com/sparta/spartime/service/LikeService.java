@@ -7,6 +7,7 @@ import com.sparta.spartime.exception.ErrorCode;
 import com.sparta.spartime.repository.LikeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +35,16 @@ public class LikeService {
             throw new BusinessException(ErrorCode.LIKE_NOT_FOUND);
         }
         likeRepository.delete(like);
+    }
+
+    public int countLike(Like.ReferenceType refType, Long refId) {
+        return likeRepository.countByReferenceTypeAndRefId(refType, refId);
+    }
+
+    @Transactional
+    public void updateLike() {
+        likeRepository.updatePostLike();
+        likeRepository.updateCommentLike();
     }
 
     private Like findLikeBy(Long userId, Like.ReferenceType refType, Long refId) {
