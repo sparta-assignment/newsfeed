@@ -1,5 +1,6 @@
 package com.sparta.spartime.service;
 
+import com.sparta.spartime.dto.CountLikeDto;
 import com.sparta.spartime.entity.Like;
 import com.sparta.spartime.entity.User;
 import com.sparta.spartime.exception.BusinessException;
@@ -39,6 +40,10 @@ public class LikeService {
 
     public int countLike(Like.ReferenceType refType, Long refId) {
         return likeRepository.countByReferenceTypeAndRefId(refType, refId);
+    }
+
+    public CountLikeDto countLikeByUser(Long userId) {
+        return likeRepository.countLikeByUser(userId);
     }
 
     @Transactional

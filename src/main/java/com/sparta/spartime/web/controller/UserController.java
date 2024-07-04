@@ -4,6 +4,7 @@ import com.sparta.spartime.aop.envelope.Envelope;
 import com.sparta.spartime.dto.request.UserEditProfileRequestDto;
 import com.sparta.spartime.dto.request.UserSignupRequestDto;
 import com.sparta.spartime.dto.request.UserWithdrawRequestDto;
+import com.sparta.spartime.dto.response.UserProfileResponseDto;
 import com.sparta.spartime.dto.response.UserResponseDto;
 import com.sparta.spartime.entity.User;
 import com.sparta.spartime.security.principal.UserPrincipal;
@@ -30,20 +31,20 @@ public class UserController {
 
     @PostMapping("/{id}")
     @Envelope("회원탈퇴 처리가 완료되었습니다.")
-    public ResponseEntity<?> withdraw(@PathVariable Long id, @RequestBody UserWithdrawRequestDto requestDto, @AuthenticationPrincipal UserPrincipal userPrincipal) {
+    public ResponseEntity<?> withdraw(@PathVariable("id") Long id, @RequestBody UserWithdrawRequestDto requestDto, @AuthenticationPrincipal UserPrincipal userPrincipal) {
         userService.withdraw(id, requestDto, userPrincipal);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}")
     @Envelope("프로필 정보 변경에 성공했습니다.")
-    public ResponseEntity<UserResponseDto> editProfile(@PathVariable Long id, @Valid @RequestBody UserEditProfileRequestDto requestDto, @LoginUser User loginUser) {
+    public ResponseEntity<UserResponseDto> editProfile(@PathVariable("id") Long id, @Valid @RequestBody UserEditProfileRequestDto requestDto, @LoginUser User loginUser) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.editProfile(id, requestDto, loginUser));
     }
 
     @GetMapping("/{id}")
     @Envelope("사용자 조회에 성공했습니다.")
-    public ResponseEntity<UserResponseDto> getProfile(@PathVariable Long id) {
+    public ResponseEntity<UserProfileResponseDto> getProfile(@PathVariable("id") Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getProfile(id));
     }
 

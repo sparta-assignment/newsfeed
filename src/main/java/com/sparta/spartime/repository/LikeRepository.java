@@ -1,10 +1,13 @@
 
 package com.sparta.spartime.repository;
 
+import com.sparta.spartime.dto.CountLikeDto;
 import com.sparta.spartime.entity.Like;
+import com.sparta.spartime.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
@@ -37,4 +40,13 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
     void updateCommentLike();
 
     int countByReferenceTypeAndRefId(Like.ReferenceType referenceType, Long refId);
+
+
+    @Query(value = "SELECT\n" +
+            "    SUM(CASE WHEN reference_type = 'POST' THEN 1 ELSE 0 END) AS postLikeCount,\n" +
+            "    SUM(CASE WHEN reference_type = 'COMMENT' THEN 1 ELSE 0 END) AS commentLikeCount\n" +
+            "FROM likes\n" +
+            "WHERE user_id = :userId;"
+            , nativeQuery = true)
+    CountLikeDto countLikeByUser(@Param("userId") Long userId);
 }

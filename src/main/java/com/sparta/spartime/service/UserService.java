@@ -1,9 +1,12 @@
 package com.sparta.spartime.service;
 
+import com.sparta.spartime.dto.CountLikeDto;
 import com.sparta.spartime.dto.request.UserEditProfileRequestDto;
 import com.sparta.spartime.dto.request.UserSignupRequestDto;
 import com.sparta.spartime.dto.request.UserWithdrawRequestDto;
+import com.sparta.spartime.dto.response.UserProfileResponseDto;
 import com.sparta.spartime.dto.response.UserResponseDto;
+import com.sparta.spartime.entity.Like;
 import com.sparta.spartime.entity.User;
 import com.sparta.spartime.exception.BusinessException;
 import com.sparta.spartime.exception.ErrorCode;
@@ -26,6 +29,7 @@ import java.util.Objects;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final LikeService likeService;
 
     public UserResponseDto signup(UserSignupRequestDto requestDto) {
         String email = requestDto.getEmail();
@@ -114,8 +118,10 @@ public class UserService {
         return new UserResponseDto(user);
     }
 
-    public UserResponseDto getProfile(Long id) {
-        return new UserResponseDto(findById(id));
+    public UserProfileResponseDto getProfile(Long id) {
+        User user = findById(id);
+        CountLikeDto likeDto = likeService.countLikeByUser(user.getId());
+        return new UserProfileResponseDto(user, likeDto.getPostLikeCount(), likeDto.getCommentLikeCount());
     }
 
     @Transactional

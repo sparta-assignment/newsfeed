@@ -1,14 +1,11 @@
-package com.sparta.spartime.repository;
+package com.sparta.spartime.repository.impl;
 
-import com.querydsl.core.types.ConstructorExpression;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.CaseBuilder;
-import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.sparta.spartime.dto.response.CommentResponseDto;
 import com.sparta.spartime.dto.response.PostResponseDto;
 import com.sparta.spartime.entity.*;
+import com.sparta.spartime.repository.PostCustomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +16,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Repository
-public class PostCustomRepositoryImpl implements PostCustomRepository{
+public class PostCustomRepositoryImpl implements PostCustomRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
